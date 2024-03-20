@@ -1,0 +1,52 @@
+Запускаем manage.py shell и вбиваем следующее:
+from News_Portal_Project.models import *
+
+#Задание1
+u1 = User.objects.create_user('Sasha')    
+u2 = User.objects.create_user('Dima')
+#Задание2
+a1 = Author.objects.create(user=u1)  
+a2 = Author.objects.create(user=u2)
+#Задание3
+sport_1 = Category.objects.create(category_field="Футбол")
+sport_2 = Category.objects.create(category_field="Бокс")   
+sport_3 = Category.objects.create(category_field="Знаменитости") 
+sport_4 = Category.objects.create(category_field="Гольф")
+#Задание4
+p1 = Post.objects.create(link_Author = a1,news_or_art='Ст',news_or_art_name="Название статьи Юзера1", news_or_art_text = "Текст статьи ради какого то текста")
+p2 = Post.objects.create(link_Author = a1,news_or_art='Ст',news_or_art_name="Название статьи Юзера1_Статья_2", news_or_art_text = "Текст статьи о каких то еще глупостях просто пишу") 
+p3 = Post.objects.create(link_Author = a2,news_or_art='Нов',news_or_art_name="Название новости Юзера2", news_or_art_text = "Текст статьи о птицах спорте и кубе")          
+#Задание5
+pc_news_link = PostCategory.objects.create(link_otm_Post_1 = Category.objects.get(pk=1) ,link_otm_Post_2 = Post.objects.get(pk=3)) 
+pc_news_link = PostCategory.objects.create(link_otm_Post_1 = Category.objects.get(pk=3) ,link_otm_Post_2 = Post.objects.get(pk=3)) 
+pc_article_link = PostCategory.objects.create(link_otm_Post_1 = Category.objects.get(pk=2) ,link_otm_Post_2 = Post.objects.get(pk=1)) 
+pc_article_2_link = PostCategory.objects.create(link_otm_Post_1 = Category.objects.get(pk=4) ,link_otm_Post_2 = Post.objects.get(pk=2))
+#Задание6
+com_1 = Comment.objects.create(link_Post_news_or_art = Post.objects.get(pk=1), link_Post_User_com = a1.user,text_com = "Первый комментарий автора 1") 
+com_2 = Comment.objects.create(link_Post_news_or_art = Post.objects.get(pk=1), link_Post_User_com = a1.user,text_com = "Второй комментарий автора 1") 
+com_3 = Comment.objects.create(link_Post_news_or_art = Post.objects.get(pk=2), link_Post_User_com = a2.user,text_com = "Третий комментарий автора 2")    
+com_4 = Comment.objects.create(link_Post_news_or_art = Post.objects.get(pk=3), link_Post_User_com = a2.user,text_com = "Четвертый комментарий автора 2")
+#Задание7
+com_1.like()
+com_2.dislike()
+com_3.like()
+com_4.like()
+com_4.like()
+p1.like()
+p2.like()
+p3.like()
+p3.like()
+#Задание8
+a1.update_rating()
+a2.update_rating()
+#Задание9
+sorting = Author.objects.order_by('-ranking_mark').values('user__username', 'ranking_mark').first()
+sorting
+#Задание10
+post_sorting = Post.objects.order_by('-ranking_mark').values('time_in','link_Author__user__username', 'ranking_mark','news_or_art_name').first()
+post_sorting
+post_sorting_ranking = Post.objects.order_by('-ranking_mark').first()
+post_sorting_ranking.preview()
+#Задание11
+comm = Comment.objects.filter(link_Post_news_or_art=post_sorting_ranking) 
+comm.values('time_in','link_Post_User_com','ranking_mark','text_com')
